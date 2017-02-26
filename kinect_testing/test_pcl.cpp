@@ -186,12 +186,9 @@ int main(int argc, char **argv) {
 		}
 //		if(iter >= 1000) break;
 //		iter++;
-       		generatePointCloud(rgbMat,depthf,cloud);
-        	viewer.showCloud(cloud);
-	}
-        generatePointCloud(rgbMat,depthf,cloud);
+        generatePointCloud(rgbMat,depthMat,cloud);
         viewer.showCloud(cloud);
-
+	}
 	device.stopVideo();
 	device.stopDepth();
 	return 0;
