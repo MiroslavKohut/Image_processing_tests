@@ -6,7 +6,7 @@ find_package( Threads REQUIRED )
 find_package( libfreenect REQUIRED )
 find_package(PCL 1.8 REQUIRED COMPONENTS common io visualization)
 
-add_subdirectory (logfile)
+add_subdirectory (logging)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -std=c++11")
 
@@ -22,7 +22,7 @@ add_definitions(${PCL_DEFINITIONS})
 add_executable(kinect_testing test_kinect.cpp)
 
 target_link_libraries(kinect_testing
-		LINK_PUBLIC logfile
+		LINK_PUBLIC logging
 		${OpenCV_LIBRARIES}
 		${CMAKE_THREAD_LIBS_INIT}
 		${FREENECT_LIBRARIES}

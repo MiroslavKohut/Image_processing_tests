@@ -6,7 +6,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/videoio.hpp>
-#include "logfile.h"
+#include "logging.h"
 #include <unistd.h>
 
 using namespace cv;
@@ -107,18 +107,26 @@ class MyFreenectDevice : public Freenect::FreenectDevice {
 int main(int argc, char **argv) {
 
     string file_name;
-    cout << "Zadajte nazov priecinku" << endl;
-    cin >> file_name;
-    logfile new_log(file_name);
+    logging *data_log;
+    data_log = new logging;
 
     bool die(false);
-	string filename("snapshot");
-	string suffix(".png");
+    string filename("snapshot");
+    string suffix(".png");
 
-	Mat depthMat(Size(640,480),CV_16UC1);
-	Mat depthf (Size(640,480),CV_8UC1);
-	Mat rgbMat(Size(640,480),CV_8UC3,Scalar(0));
-	Mat ownMat(Size(640,480),CV_8UC3,Scalar(0));
+    Mat depthMat(Size(640,480),CV_16UC1);
+    Mat depthf (Size(640,480),CV_8UC1);
+    Mat rgbMat(Size(640,480),CV_8UC3,Scalar(0));
+    Mat ownMat(Size(640,480),CV_8UC3,Scalar(0));
+
+    Freenect::Freenect freenect;
+    MyFreenectDevice& device = freenect.createDevice<MyFreenectDevice>(0);
+
+    cout << "Zadajte nazov priecinku" << endl;
+    cin >> file_name;
+
+    if(!data_log->createDir(file_name))
+        return 0;
 
 	// The next two lines must be changed as Freenect::Freenect
 	// isn't a template but the method createDevice:
@@ -126,17 +134,26 @@ int main(int argc, char **argv) {
 	// MyFreenectDevice& device = freenect.createDevice(0);
 	// by these two lines:
 
-	Freenect::Freenect freenect;
-	MyFreenectDevice& device = freenect.createDevice<MyFreenectDevice>(0);
+
 
 	namedWindow("rgb",CV_WINDOW_AUTOSIZE);
 	namedWindow("depth",CV_WINDOW_AUTOSIZE);
-	device.startVideo();
+
+    device.startVideo();
 	device.startDepth();
+    usleep(250000);
+    device.stopVideo();
+    device.stopDepth();
 
-	usleep(500000);
+    device.startVideo();
+    device.startDepth();
+	usleep(2500000);
 
-    for (int i = 0; i<30;i++){
+    string name_rgb;
+    string name_depth;
+    int i = 0;
+
+    for (i; i<30;i++){
 
         device.getVideo(rgbMat);
         device.getDepth(depthMat);
@@ -145,47 +162,22 @@ int main(int argc, char **argv) {
         depthMat.convertTo(depthf, CV_8UC1, 255.0/2048.0);
         cv::imshow("depth",depthf);
 
-        string name = "image" + to_string(i) + ".png";
-        string name_depth = "depth_image" + to_string(i) + ".png";
+        name_rgb = "rgb_image" + to_string(i) + ".png";
+        name_depth = "depth_image" + to_string(i) + ".png";
 
-        if(!new_log.saveImage(rgbMat,name)){
+        if(!data_log->saveImage(rgbMat,name_rgb)){
             return 0;
         }
-
-		if(!new_log.saveImage(depthf,name_depth)){
+		if(!data_log->saveImage(depthf,name_depth)){
 			return 0;
 		}
     }
+    data_log->saveLog(to_string(i),name_depth,name_rgb);
 
 	device.stopVideo();
 	device.stopDepth();
+    delete data_log;
 
 	return 0;
 }
-
-
-
-/*
- * 	/*while (!die) {
-		device.getVideo(rgbMat);
-		device.getDepth(depthMat);
-		cv::imshow("rgb", rgbMat);
-		depthMat.convertTo(depthf, CV_8UC1, 255.0/2048.0);
-		cv::imshow("depth",depthf);
-		char k = cvWaitKey(5);
-		if( k == 27 ){
-			cvDestroyWindow("rgb");
-			cvDestroyWindow("depth");
-			break;
-		}
-		if( k == 8 ) {
-			std::ostringstream file;
-			file << filename << i_snap << suffix;
-			cv::imwrite(file.str(),rgbMat);
-			i_snap++;
-		}
-//		if(iter >= 1000) break;
-//		iter++;
-	}*/
-
 

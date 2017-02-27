@@ -16,21 +16,25 @@
 using namespace std;
 using namespace cv;
 
-class logfile {
+class logging {
 
 private:
 
 public:
 
-    logfile(string dir_name);
-
+    logging();
+    ~logging();
+    bool createDir(string dir_name);
+    bool openDir(string dir_name);
     bool saveImage(Mat input_image, string name);
-    bool saveLog(string file_name);
+    bool saveLog(string images_count, string depth_name, string rgb_name);
     bool readImageVideo(string file_name, Mat & output_image);
     bool readImageDepth(string file_name, Mat & output_image);
 
 private:
     string dir_path;
+    std::ofstream *outfile;
+
 
 };
 

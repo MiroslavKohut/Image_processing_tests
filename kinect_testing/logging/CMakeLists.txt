@@ -8,9 +8,9 @@ include_directories("/usr/include/libusb-1.0/"
         ${PCL_INCLUDE_DIRS}
         )
 
-add_library (logfile logfile.cpp logfile.h)
+add_library (logging logging.cpp logging.h)
 
-target_link_libraries(logfile
+target_link_libraries(logging
         ${OpenCV_LIBRARIES}
         ${CMAKE_THREAD_LIBS_INIT}
         opencv_imgcodecs
@@ -23,4 +23,4 @@ target_link_libraries(logfile
         ${Boost_REGEX_LIBRARY}
         )
 
-target_include_directories (logfile PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories (logging PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
