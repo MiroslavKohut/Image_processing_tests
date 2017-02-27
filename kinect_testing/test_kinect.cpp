@@ -7,6 +7,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/videoio.hpp>
 #include "logfile.h"
+#include <unistd.h>
 
 using namespace cv;
 using namespace std;
@@ -104,10 +105,15 @@ class MyFreenectDevice : public Freenect::FreenectDevice {
 
 
 int main(int argc, char **argv) {
-	bool die(false);
+
+    string file_name;
+    cout << "Zadajte nazov priecinku" << endl;
+    cin >> file_name;
+    logfile new_log(file_name);
+
+    bool die(false);
 	string filename("snapshot");
 	string suffix(".png");
-	int i_snap(0),iter(0);
 
 	Mat depthMat(Size(640,480),CV_16UC1);
 	Mat depthf (Size(640,480),CV_8UC1);
@@ -127,7 +133,40 @@ int main(int argc, char **argv) {
 	namedWindow("depth",CV_WINDOW_AUTOSIZE);
 	device.startVideo();
 	device.startDepth();
-	while (!die) {
+
+	usleep(500000);
+
+    for (int i = 0; i<30;i++){
+
+        device.getVideo(rgbMat);
+        device.getDepth(depthMat);
+
+        cv::imshow("rgb", rgbMat);
+        depthMat.convertTo(depthf, CV_8UC1, 255.0/2048.0);
+        cv::imshow("depth",depthf);
+
+        string name = "image" + to_string(i) + ".png";
+        string name_depth = "depth_image" + to_string(i) + ".png";
+
+        if(!new_log.saveImage(rgbMat,name)){
+            return 0;
+        }
+
+		if(!new_log.saveImage(depthf,name_depth)){
+			return 0;
+		}
+    }
+
+	device.stopVideo();
+	device.stopDepth();
+
+	return 0;
+}
+
+
+
+/*
+ * 	/*while (!die) {
 		device.getVideo(rgbMat);
 		device.getDepth(depthMat);
 		cv::imshow("rgb", rgbMat);
@@ -147,12 +186,6 @@ int main(int argc, char **argv) {
 		}
 //		if(iter >= 1000) break;
 //		iter++;
-	}
-
-	device.stopVideo();
-	device.stopDepth();
-	return 0;
-}
-
+	}*/
 
 

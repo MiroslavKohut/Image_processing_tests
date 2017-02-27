@@ -20,16 +20,17 @@ class logfile {
 
 private:
 
-    logfile();
-    ~logfile();
-
 public:
 
-    void createFile(string file_name);
-    void saveImage(Mat);
-    void saveLog(string file_name);
-    Mat readImage(string file_name);
+    logfile(string dir_name);
 
+    bool saveImage(Mat input_image, string name);
+    bool saveLog(string file_name);
+    bool readImageVideo(string file_name, Mat & output_image);
+    bool readImageDepth(string file_name, Mat & output_image);
+
+private:
+    string dir_path;
 
 };
 

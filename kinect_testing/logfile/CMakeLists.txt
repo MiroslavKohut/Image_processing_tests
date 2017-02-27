@@ -1,5 +1,8 @@
 # Create a library called "Hello" which includes the source file "hello.cxx".
 # The extension is already found. Any number of sources could be listed here.
+find_package( Boost REQUIRED COMPONENTS program_options regex )
+include_directories( ${Boost_INCLUDE_DIRS} )
+
 include_directories("/usr/include/libusb-1.0/"
         ${OpenCV_INCLUDE_DIRS}OPENNI_INCLUDE_DIRS
         ${PCL_INCLUDE_DIRS}
@@ -16,6 +19,8 @@ target_link_libraries(logfile
         opencv_highgui
         /usr/local/lib/libopencv_core.so.3.1
         /usr/local/lib/libopencv_imgproc.so.3.1
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+        ${Boost_REGEX_LIBRARY}
         )
 
 target_include_directories (logfile PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
