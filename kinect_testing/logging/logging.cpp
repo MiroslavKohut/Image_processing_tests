@@ -24,7 +24,7 @@ class myexception: public exception
 /* Methods */
 
 logging::logging() {
-
+    this->dir_path = "";
 }
 
 logging::~logging(){
@@ -118,15 +118,40 @@ bool logging::saveLog(string images_count, string depth_name, string rgb_name)  
 }
 
 
-bool logging::readImageDepth(string file_name, Mat &output_image) {
+bool logging::readImageDepth(string file_name, vector<Mat> &output_image_vec) {
 
-    this->openDir(file_name);
+
+    if(this->openDir(file_name)){
+        std::string path= this->dir_path + "/" + "depth_edit_image";
+
+        for (int i =0;i<150;i++){
+
+            Mat image = imread(path + to_string(i) + ".png", cv::IMREAD_UNCHANGED);
+            output_image_vec.push_back(image);
+        }
+        return true;
+    }
+    else
+        return false;
 
 }
 
-bool logging::readImageVideo(string file_name, Mat &output_image) {
+bool logging::readImageVideo(string file_name, vector<Mat> &output_image_vec) {
 
-    this->openDir(file_name);
+    if(this->openDir(file_name)){
+        Mat output;
+        std::string path= this->dir_path + "/" + "rgb_image";
 
+        for (int i =0;i<150;i++){
+
+            Mat image = imread(path + to_string(i) + ".png", CV_LOAD_IMAGE_COLOR);
+            image.copyTo(output);
+            output_image_vec.push_back(output);
+
+        }
+        return true;
+    }
+    else
+        return false;
 }
 

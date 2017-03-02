@@ -47,7 +47,6 @@ void generatePointCloud(const cv::Mat & rgbMat, const cv::Mat & depthMat, pcl::P
 using namespace cv;
 using namespace std;
 
-
 class myMutex {
 	public:
 		myMutex() {
@@ -75,7 +74,7 @@ class MyFreenectDevice : public Freenect::FreenectDevice {
 
 			for( unsigned int i = 0 ; i < 2048 ; i++) {
 				float v = i/2048.0;
-				v = std::pow(v, 3)* 6;
+				v = pow(v, 3)* 6;
 				m_gamma[i] = v*6*256;
 			}
 		}
@@ -166,6 +165,13 @@ int main(int argc, char **argv) {
 	namedWindow("depth",CV_WINDOW_AUTOSIZE);
 	device.startVideo();
 	device.startDepth();
+	usleep(100000);
+    device.stopVideo();
+    device.stopDepth();
+    usleep(100000);
+    device.startVideo();
+    device.startDepth();
+
 	while (!die) {
 		device.getVideo(rgbMat);
 		device.getDepth(depthMat);

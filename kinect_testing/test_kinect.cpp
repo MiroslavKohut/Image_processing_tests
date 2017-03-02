@@ -151,26 +151,39 @@ int main(int argc, char **argv) {
 
     string name_rgb;
     string name_depth;
+    string name_edit;
     int i = 0;
 
-    for (i; i<30;i++){
+    for (i; i<150;i++){
 
         device.getVideo(rgbMat);
         device.getDepth(depthMat);
 
-        cv::imshow("rgb", rgbMat);
-        depthMat.convertTo(depthf, CV_8UC1, 255.0/2048.0);
-        cv::imshow("depth",depthf);
+        //cv::imshow("rgb", rgbMat);
+        depthMat.convertTo(depthf, CV_8UC1, 255.0/2048.0); //konverzia iba pred zobrazovanim
+        //opisat techniky ziskania hlbkoveho obrazu
+        //Lukas Martis materialy na sposoby ziskavania hlbkoveho obrazu
+        //cca 150 snimkov na potlacenie sumu
+        //medianovy filter na potlacanie sumu hodnotu kazdeho pixela v obraze ziskam tak ze spravim sucet pixelu vo vsetkych obrazoch a spravim median
+        // aby som vybral najvhodnejsie merania
+
+
+        //tacv::imshow("depth",depthf);
 
         name_rgb = "rgb_image" + to_string(i) + ".png";
+        name_edit = "depth_edit_image" + to_string(i) + ".png";
         name_depth = "depth_image" + to_string(i) + ".png";
+        //TODO rovno ukladat depthMat a potom loadovat cez povodny load
 
         if(!data_log->saveImage(rgbMat,name_rgb)){
             return 0;
         }
-		if(!data_log->saveImage(depthf,name_depth)){
+		if(!data_log->saveImage(depthMat,name_depth)){
 			return 0;
 		}
+        if(!data_log->saveImage(depthf,name_edit)){
+            return 0;
+        }
     }
     data_log->saveLog(to_string(i),name_depth,name_rgb);
 

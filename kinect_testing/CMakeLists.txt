@@ -51,3 +51,15 @@ target_link_libraries(pcl_testing
 		/usr/local/lib/libopencv_imgproc.so.3.1
 		)
 
+add_executable(sorting_data sorting_data.cpp)
+
+target_link_libraries(sorting_data
+		LINK_PUBLIC logging
+		${OpenCV_LIBRARIES}
+		opencv_imgcodecs
+		opencv_core
+		opencv_videoio
+		opencv_highgui
+		/usr/local/lib/libopencv_core.so.3.1
+		/usr/local/lib/libopencv_imgproc.so.3.1
+		)

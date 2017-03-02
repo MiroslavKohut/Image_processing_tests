@@ -2,6 +2,7 @@
 # The extension is already found. Any number of sources could be listed here.
 find_package( Boost REQUIRED COMPONENTS program_options regex )
 include_directories( ${Boost_INCLUDE_DIRS} )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -std=c++11")
 
 include_directories("/usr/include/libusb-1.0/"
         ${OpenCV_INCLUDE_DIRS}OPENNI_INCLUDE_DIRS
