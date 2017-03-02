@@ -12,6 +12,9 @@
 
 #include "logging.h"
 
+
+
+
 /*Exceptions*/
 class myexception: public exception
 {
@@ -23,8 +26,9 @@ class myexception: public exception
 
 /* Methods */
 
-logging::logging() {
+logging::logging(int images_count) {
     this->dir_path = "";
+    this->images_count = images_count;
 }
 
 logging::~logging(){
@@ -120,11 +124,11 @@ bool logging::saveLog(string images_count, string depth_name, string rgb_name)  
 
 bool logging::readImageDepth(string file_name, vector<Mat> &output_image_vec) {
 
-
+    output_image_vec.clear();
     if(this->openDir(file_name)){
         std::string path= this->dir_path + "/" + "depth_image";
 
-        for (int i =0;i<150;i++){
+        for (int i = 0; i<this->images_count; i++){
 
             Mat image = imread(path + to_string(i) + ".png", cv::IMREAD_UNCHANGED);
             output_image_vec.push_back(image);
@@ -138,11 +142,12 @@ bool logging::readImageDepth(string file_name, vector<Mat> &output_image_vec) {
 
 bool logging::readImageVideo(string file_name, vector<Mat> &output_image_vec) {
 
+    output_image_vec.clear();
     if(this->openDir(file_name)){
         Mat output;
         std::string path= this->dir_path + "/" + "rgb_image";
 
-        for (int i =0;i<150;i++){
+        for (int i =0;i<this->images_count;i++){
 
             Mat image = imread(path + to_string(i) + ".png", CV_LOAD_IMAGE_COLOR);
             image.copyTo(output);

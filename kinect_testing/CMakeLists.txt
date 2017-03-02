@@ -19,9 +19,9 @@ include_directories("/usr/include/libusb-1.0/"
 
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
-add_executable(kinect_testing test_kinect.cpp)
+add_executable(capture_data capture_data.cpp)
 
-target_link_libraries(kinect_testing
+target_link_libraries(capture_data
 		LINK_PUBLIC logging
 		${OpenCV_LIBRARIES}
 		${CMAKE_THREAD_LIBS_INIT}
@@ -51,9 +51,9 @@ target_link_libraries(pcl_testing
 		/usr/local/lib/libopencv_imgproc.so.3.1
 		)
 
-add_executable(sorting_data sorting_data.cpp)
+add_executable(sort_data sort_data.cpp)
 
-target_link_libraries(sorting_data
+target_link_libraries(sort_data
 		LINK_PUBLIC logging
 		${OpenCV_LIBRARIES}
 		opencv_imgcodecs

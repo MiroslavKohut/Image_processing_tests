@@ -22,7 +22,7 @@ private:
 
 public:
 
-    logging();
+    logging(int images_count);
     ~logging();
     bool createDir(string dir_name);
     bool openDir(string dir_name);
@@ -32,6 +32,7 @@ public:
     bool readImageDepth(string file_name, vector<Mat> &output_image_vec);
 
 private:
+    int images_count;
     string dir_path;
     std::ofstream *outfile;
 
