@@ -122,7 +122,7 @@ bool logging::readImageDepth(string file_name, vector<Mat> &output_image_vec) {
 
 
     if(this->openDir(file_name)){
-        std::string path= this->dir_path + "/" + "depth_edit_image";
+        std::string path= this->dir_path + "/" + "depth_image";
 
         for (int i =0;i<150;i++){
 

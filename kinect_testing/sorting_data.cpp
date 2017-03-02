@@ -10,11 +10,35 @@
 #include <opencv2/videoio.hpp>
 #include "logging.h"
 
+
+using namespace std;
+using namespace cv;
+class Filter{
+
+public:
+
+    bool imagesMedian(vector<Mat> input_images, Mat output_image);
+
+    Filter();
+    ~Filter();
+
+};
+
+Filter::Filter(){
+
+}
+
+bool Filter::imagesMedian(vector<Mat> input_images, Mat output_image) {
+
+
+}
+
 int main(int argc, char **argv) {
 
     string file_name;
-    logging *data_log;
-    data_log = new logging;
+
+    logging *data_log = new logging;
+    Filter *data_filter = new Filter;
 
     bool die(false);
     string filename("snapshot");
@@ -44,14 +68,13 @@ int main(int argc, char **argv) {
         cout << "citam" << endl;
 
         while (i != read_images.size()) {
-            cv::imshow("depth", read_images[i]);
+            read_images[i].convertTo(depthf, CV_8UC1, 255.0/2048.0);
+            cv::imshow("depth", depthf);
             i++;
-            char k = cvWaitKey(100);
+            char k = cvWaitKey(50);
         }
 
     }
-
-
     //cv::imshow("rgb", rgbMat);
     //depthMat.convertTo(depthf, CV_8UC1, 255.0/2048.0); //konverzia iba pred zobrazovanim
     //opisat techniky ziskania hlbkoveho obrazu
