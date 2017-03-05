@@ -72,6 +72,7 @@ bool logging::openDir(string dir_name) {
     struct stat sb;
     if (stat(dir_path.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode))
     {
+        cout << "Dir opened: " << this->dir_path <<endl;
         return true;
     }
     else{
@@ -138,6 +139,24 @@ bool logging::readImageDepth(string file_name, vector<Mat> &output_image_vec) {
     else
         return false;
 
+}
+
+bool logging::readImageDepth(string file_name, Mat &output_image) {
+
+    std::string path= this->dir_path + "/" + file_name;
+    cout << path + ".png" <<endl;
+    Mat image = imread(path + ".png", cv::IMREAD_UNCHANGED);
+    image.copyTo(output_image);
+    return true;
+}
+
+bool logging::readImageRGB(string file_name, Mat &output_image) {
+
+    std::string path= this->dir_path + "/" + file_name;
+    cout << path + ".png" <<endl;
+    Mat image = imread(path + ".png", CV_LOAD_IMAGE_COLOR);
+    image.copyTo(output_image);
+    return true;
 }
 
 bool logging::readImageVideo(string file_name, vector<Mat> &output_image_vec) {

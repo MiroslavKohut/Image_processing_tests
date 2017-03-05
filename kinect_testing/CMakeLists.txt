@@ -51,6 +51,39 @@ target_link_libraries(pcl_testing
 		/usr/local/lib/libopencv_imgproc.so.3.1
 		)
 
+add_executable(mesh_generator mesh_generator.cpp)
+
+target_link_libraries(mesh_generator
+		LINK_PUBLIC logging
+		${OpenCV_LIBRARIES}
+		${CMAKE_THREAD_LIBS_INIT}
+		${FREENECT_LIBRARIES}
+		${PCL_COMMON_LIBRARIES}
+		${PCL_IO_LIBRARIES}
+		${PCL_VISUALIZATION_LIBRARIES}
+		opencv_imgcodecs
+		opencv_core
+		opencv_videoio
+		opencv_highgui
+		/usr/local/lib/libopencv_core.so.3.1
+		/usr/local/lib/libopencv_imgproc.so.3.1
+		)
+
+target_link_libraries(pcl_testing
+		${OpenCV_LIBRARIES}
+		${CMAKE_THREAD_LIBS_INIT}
+		${FREENECT_LIBRARIES}
+		${PCL_COMMON_LIBRARIES}
+		${PCL_IO_LIBRARIES}
+		${PCL_VISUALIZATION_LIBRARIES}
+		opencv_imgcodecs
+		opencv_core
+		opencv_videoio
+		opencv_highgui
+		/usr/local/lib/libopencv_core.so.3.1
+		/usr/local/lib/libopencv_imgproc.so.3.1
+		)
+
 add_executable(sort_data sort_data.cpp)
 
 target_link_libraries(sort_data

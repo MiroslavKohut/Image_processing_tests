@@ -30,6 +30,8 @@ public:
     bool saveLog(string images_count, string depth_name, string rgb_name);
     bool readImageVideo(string file_name, vector<Mat> &output_image_vec);
     bool readImageDepth(string file_name, vector<Mat> &output_image_vec);
+    bool readImageDepth(string file_name, Mat &output_image_vec);
+    bool readImageRGB(string file_name, Mat &output_image);
 
 private:
     int images_count;

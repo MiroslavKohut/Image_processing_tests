@@ -149,8 +149,8 @@ int main(int argc, char **argv) {
 	Mat rgbMat(Size(640,480),CV_8UC3,Scalar(0));
 	Mat ownMat(Size(640,480),CV_8UC3,Scalar(0));
 
-    	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-    	pcl::visualization::CloudViewer viewer("Cloud Viewer");
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::visualization::CloudViewer viewer("Cloud Viewer");
 
 	// The next two lines must be changed as Freenect::Freenect
 	// isn't a template but the method createDevice:

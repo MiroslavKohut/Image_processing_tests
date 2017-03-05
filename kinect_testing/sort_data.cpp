@@ -84,8 +84,8 @@ int main(int argc, char **argv) {
     Mat depthMat(Size(640,480),CV_16UC1);
 
     cout << "Zadajte nazov priecinku" << endl;
-    namedWindow("depth",CV_WINDOW_AUTOSIZE);
-    namedWindow("filtered_depth",CV_WINDOW_AUTOSIZE);
+    //namedWindow("depth",CV_WINDOW_AUTOSIZE);
+    //namedWindow("filtered_depth",CV_WINDOW_AUTOSIZE);
 
     cin >> file_name;
     if(!data_save->createDir(file_name))
