@@ -21,7 +21,6 @@
 #include <pcl/common/transforms.h>
 #include <pcl/console/parse.h>
 #include <pcl/io/io.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
 
 #include "logging.h"
@@ -40,6 +39,7 @@ typedef struct Target{
     float rx; // radians
     float ry;
     float rz;
+    float rw;
 } Target;
 
 typedef struct Target_origin{
@@ -60,14 +60,16 @@ public:
     void generatePointCloud(const cv::Mat & rgbMat, const cv::Mat & depthMat, pcl::PointCloud<pcl::PointXYZRGB>::Ptr & pointcloud,int id);
 
 private:
-    const struct Target target_10 = {0.70,0.000,0.20,M_PI,0,-M_PI_2};
-    const struct Target target_20 = {1.05,-0.35,0.55,-M_PI_2,M_PI_4,-M_PI_2-M_PI_4};
-    const struct Target target_30 = {1.40,-0.70,0.20,M_PI,0,M_PI};
-    const struct Target target_40 = {0.70,-1.40,0.20,M_PI,0,M_PI_2};
-    const struct Target target_50 = {0.00,-0.70,0.20,M_PI,0,0};
-    const struct Target target_60 = {0.70,-0.60,0.90,0,M_PI_2,-M_PI_2};
-    const struct Target target_70 = {1.05,-1.05,0.55,-M_PI,M_PI_4,M_PI_2+M_PI_4};
-    const struct Target target_80 = {0.35,-1.05,0.55,M_PI,M_PI_4,M_PI_4};
+    const struct Target target_10 ={700,0,200,0,-0.707106781,0.707106781,0};
+    const struct Target target_20 ={1049.999698851,-350.00005995,549.999355294,0.499999609,0.000000171,0.707107214,-0.499999778};
+    const struct Target target_30 ={1400,-700,200,0,0,1,0};
+    const struct Target target_40 ={700,-1400,200,0,0.707106781,0.707106781,0};
+    const struct Target target_50 ={0,-700,200,0,1,0,0};
+    const struct Target target_60 ={700,-600,900,0.5,0.5,0.5,-0.5};
+    const struct Target target_70 ={1050,-1050,550,0.353553391,0.353553389,0.853553391,-0.14644661};
+    const struct Target target_80 ={350,-1050,550,0.14644661,0.853553391,0.353553389,-0.353553391};
+
+
     int depth_idx_f;
 };
 
@@ -185,6 +187,8 @@ int main(int argc, char **argv) {
     string file_name;
     string read_file_name;
 
+    pcl::PLYReader Reader;
+
 
     logging *data_load = new logging(1);
     Meshgen *mesh_generator = new Meshgen();
@@ -193,19 +197,30 @@ int main(int argc, char **argv) {
     Mat rgbMat(Size(640,480),CV_8UC3,Scalar(0));
     Mat depthMat(Size(640,480),CV_16UC1);
 
-    cout << "Zadajte id obrazka" << endl;
-    cin >> file_name;
+    //cout << "Zadajte id obrazka" << endl;
+    //cin >> file_name;
 
-    if(!data_load->openDir("test"))
-        return 0;
-    namedWindow("filtered_depth",CV_WINDOW_AUTOSIZE);
-    namedWindow("rgb_show",CV_WINDOW_AUTOSIZE);
+    //if(!data_load->openDir("test"))
+     //   return 0;
+
+
+    //namedWindow("filtered_depth",CV_WINDOW_AUTOSIZE);
+    //namedWindow("rgb_show",CV_WINDOW_AUTOSIZE);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::visualization::CloudViewer viewer("Cloud Viewer");
-    int i=1;
-   // for (int i=10;i<=80;i=i+10){
-        //file_name = to_string(i);
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-        if(data_load->readImageDepth("depth_target_"+file_name,depthMat)) {
+
+    for (int i = 10;i<=80;i = i+10){
+
+        Reader.read("/home/mirec/Documents/Capture_data_kinect/test/target_"+to_string(i)+".ply", *cloud);
+        viewer.showCloud(cloud);
+
+        //cvWaitKey(5000);
+    }
+
+    Reader.read("/home/mirec/Documents/Capture_data_kinect/test/target_"+to_string(10)+".ply", *cloud);
+    pcl::io::savePLYFileBinary("novy_cloud.ply",*cloud);
+
+        /*if(data_load->readImageDepth("depth_target_"+file_name,depthMat)) {
 
             depthMat.convertTo(depthf, CV_8UC1, 255.0 / 2048.0);
             cv::imshow("filtered_depth", depthf);
@@ -214,13 +229,8 @@ int main(int argc, char **argv) {
 
             depthMat.convertTo(depthf, CV_8UC1, 255.0 / 2048.0);
             cv::imshow("rgb_show", rgbMat);
-        }
+        }*/
 
-        mesh_generator->generatePointCloud(rgbMat,depthMat,cloud,i);
-        //metres and radians
-        viewer.showCloud(cloud);
-        pcl::io::savePLYFileBinary("cloud",*cloud);
-        cvWaitKey(5000);
    // }
     cvWaitKey(10000000);
 
